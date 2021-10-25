@@ -27,8 +27,8 @@ class Circle(base.Base):
         r = self.get_proportions(scale=scaled)['r']
         return f"circle({center.x},{center.y},{r})"
 
-    def check_correct_shape_settings(self):
-        super(Circle, self).check_correct_shape_settings()
+    def check_correct_shape_settings(self, **kwargs):
+        super(Circle, self).check_correct_shape_settings(**kwargs)
         for var in [self.r, self.center.x, self.center.y]:
             if not isinstance(var, float) and not isinstance(var, int):
                 raise ValueError(

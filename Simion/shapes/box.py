@@ -78,4 +78,5 @@ class Box(base.Base):
 
     def get_gem_input(self, scale=True):
         super(Box, self).get_gem_input()
-        return f"box(0,0,{delka_einzel - 1},{vyska_einzel})"
+        return f"box({self.left_down_corner.x}, {self.left_down_corner.y},{self.length},{self.height})"
+

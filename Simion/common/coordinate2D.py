@@ -19,7 +19,7 @@ class XY(object):
         return XY(self.x*other, self.y*other)
 
     def __mul__(self, other):
-        self.__rmul__(other)
+        return self.__rmul__(other)
 
     def __add__(self, other):
         if isinstance(other, XY):
