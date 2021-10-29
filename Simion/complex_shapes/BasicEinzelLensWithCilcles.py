@@ -4,15 +4,19 @@ from Simion.common import coordinate2D as c
 
 
 class BasicEinzelLensWithCircle(basic_canvas.BasicCanvas):
-    def __init__(self, einzel_length, einzel_height, circle_radius, space, **kwargs):
-        self.einzel_length = abs(einzel_length)
-        self.einzel_height = abs(einzel_height)
-        self.circle_radius = abs(circle_radius)
-        self.space = abs(space)
+    def __init__(self, **kwargs):
+        self.define_required_proportions([
+            ['einzel_length', int],
+            ['einzel_height', int],
+            ['circle_radius', int],
+            ['space', int]
+        ])
         super(BasicEinzelLensWithCircle, self).__init__(**kwargs)
 
     def add_einzel_cylinder(self, move_current_pos=True, **kwargs):
-        cyl = BasicEinzelCylinder.EinzelCylinderWithCircle(self.einzel_length, self.einzel_height, self.circle_radius, origin=self.get_current_pos())
+        cyl = BasicEinzelCylinder.EinzelCylinderWithCircle(origin=self.get_current_pos())
+        cyl.set_proportions({'einzel_length': self.get('einzel_length'), 'einzel_height': self.get('einzel_height'),
+                             'circle_radius': self.get('circle_radius')})
         if move_current_pos:
             self.set_current_pos(c.XY(cyl.get_max_x(scale=False), cyl.get_origin().y))
         self.add_shape(cyl, **kwargs)
@@ -20,7 +24,7 @@ class BasicEinzelLensWithCircle(basic_canvas.BasicCanvas):
     def setup_canvas(self):
         super(BasicEinzelLensWithCircle, self).setup_canvas()
         self.add_einzel_cylinder(potential=0)
-        self.add_space(self.space, 0)
+        self.add_space(self.get('space'), 0)
         self.add_einzel_cylinder(potential=1)
-        self.add_space(self.space, 0)
+        self.add_space(self.get('space'), 0)
         self.add_einzel_cylinder(potential=2)

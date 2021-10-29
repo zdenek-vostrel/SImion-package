@@ -37,6 +37,8 @@ class BasicCanvas(base.Base):
 
     def setup_canvas(self):
         logging.info("Setting up canvas.")
+        # self.check_correct_canvas_settings()
+        # todo pridat check spravneho nastaveni -- momentalne chyba, pokud nebyl spravne nastaven canvas, coz nebylo podstatne pro complex shapes
 
     def get_canvas_settings(self, name):
         if name not in self.canvas_settings.keys():
