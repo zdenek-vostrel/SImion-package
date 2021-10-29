@@ -4,10 +4,10 @@ from Simion.common import coordinate2D as C
 
 class Circle(base.Base):
     def __init__(self, center, r, scale=1):
+        super(Circle, self).__init__(proportions={'r': r})
         self.scale = scale
         self.set_center(center)
         self.set_origin(center)
-        super(Circle, self).__init__(proportions={'r': r})
         self.r = self.get_proportions(scale=False)['r']
         self.center = self.get_proportions(scale=False)['center']
 
@@ -23,6 +23,7 @@ class Circle(base.Base):
 
     def get_gem_input(self, scale=True):
         super(Circle, self).get_gem_input()
+        scaled = self.scale if scale else 1
         center = self.get_proportions(scale=scaled)['center']
         r = self.get_proportions(scale=scaled)['r']
         return f"circle({center.x},{center.y},{r})"

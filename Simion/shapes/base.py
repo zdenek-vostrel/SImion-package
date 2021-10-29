@@ -53,6 +53,10 @@ class Base(object):
         temp = {key: (self.proportions[key] * scale_factor if self.proportions[key] is not None else self.proportions[key]) for key in self.proportions.keys()}
         return temp
 
+    def add_proportions_dict(self, props : dict) -> None:
+        for key in props.keys():
+            self.add_proportions(key, props[key])
+
     def add_proportions(self, name, value, overwrite=True):
         if not overwrite and name in self.proportions.keys():
             print(f"Proportion {name} with value {value} was not set: it is already set to {self.proportions[name]}.")
@@ -66,6 +70,14 @@ class Base(object):
     def set_origin(self, origin):
         self.origin = self.to_xy(origin)
         self.add_proportions("origin", self.origin, overwrite=True)
+        if self.get_max_x() is None:
+            self.set_max_x(self.origin.x)
+        if self.get_max_y() is None:
+            self.set_max_y(self.origin.y)
+        if self.get_min_x() is None:
+            self.set_min_x(self.origin.x)
+        if self.get_min_y() is None:
+            self.set_min_y(self.origin.y)
 
     def get_origin(self, scale=False):
         if self.origin is None:

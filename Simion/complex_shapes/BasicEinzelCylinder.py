@@ -9,7 +9,7 @@ class EinzelCylinderWithCircle(basic_canvas.BasicCanvas):
         super(EinzelCylinderWithCircle, self).__init__(**kwargs)
 
     def set_potential(self, value):
-        super(EinzelCylinderWithCircle, self).set_potential()
+        super(EinzelCylinderWithCircle, self).set_potential(value)
         for shape in self.shapes:
             shape.set_potential(value)
 

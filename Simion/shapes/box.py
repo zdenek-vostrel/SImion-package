@@ -5,6 +5,7 @@ from Simion.common import coordinate2D as C
 class Box(base.Base):
     def __init__(self, length, height, center=None, left_down_corner=None, left_up_corner=None, right_up_corner=None,
                  right_down_corner=None):
+        super(Box, self).__init__(proportions={'length': length, 'height':height})
         self.length = abs(length)
         self.height = abs(height)
         self.left_down_corner = None
@@ -22,7 +23,7 @@ class Box(base.Base):
         else:
             raise KeyError("One of the origin options must be chosen!")
 
-        super(Box, self).__init__(proportions={"length": length, "height": height, "left_down_corner": self.left_down_corner})
+        self.add_proportions_dict({"length": length, "height": height, "left_down_corner": self.left_down_corner})
 
     def set_common(self, c):
         c = self.to_xy(c)

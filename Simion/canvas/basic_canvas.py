@@ -1,7 +1,6 @@
 from Simion.shapes import base
 from Simion.shapes import circle
 from Simion.shapes import box
-from Simion.shapes import space
 from Simion.common import coordinate2D as c
 import logging
 import pathlib
@@ -50,7 +49,7 @@ class BasicCanvas(base.Base):
         if name in self.canvas_settings.keys() and not overwrite:
             logging.warning(f"Setting \" {name} \" not set to new value, because overwrite is set to overwrite!")
         else:
-            self.canvas_settings[name] = value
+            self.canvas_settings[name] = value.lower()
 
     def set_out_dir(self, out_dir):
         self.out_dir = pathlib.Path(out_dir)
@@ -93,7 +92,7 @@ class BasicCanvas(base.Base):
     def check_correct_canvas_settings(self):
         if self.canvas_settings["symmetry"] not in ["cylindrical", "planar"]:
             raise ValueError("Symmetry must be set to either cylindrical or planar!")
-        if self.canvas_settings["mirroring"].lower() not in ['x', 'y', 'z']:
+        if self.canvas_settings["mirroring"] not in ['x', 'y', 'z']:
             raise ValueError("Mirroring must be set to either X,Y and Z")
 
     def save(self, scale=True):
@@ -139,6 +138,9 @@ class BasicCanvas(base.Base):
         shape.set_scale(self.scale)
         shape.set_potential(potential)
         shape.fill = fill
+        # if shape is a complex shape/other canvas, it needs to be setup
+        if hasattr(shape, "setup_canvas") and callable(getattr(shape, "setup_canvas")):
+            shape.setup_canvas()
         self.shapes += [shape]
         self.update_max_min()
 
