@@ -20,7 +20,6 @@ class EinzelLensBasic(basic_canvas.BasicCanvas):
         ein.set_proportions({'einzel_length': self.get('einzel_length'), 'einzel_height': self.get('einzel_height'),
                              'circle_radius': self.get('circle_radius'), 'space': self.get('space_between')})
         if move_current_pos:
-            print(ein.get_max_x(scale=False))
             self.set_current_pos(c.XY(ein.get_max_x(scale=False), ein.get_origin().y))
         self.add_shape(ein, **kwargs)
 

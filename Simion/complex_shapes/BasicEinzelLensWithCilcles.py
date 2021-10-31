@@ -5,13 +5,13 @@ from Simion.common import coordinate2D as c
 
 class BasicEinzelLensWithCircle(basic_canvas.BasicCanvas):
     def __init__(self, **kwargs):
+        super(BasicEinzelLensWithCircle, self).__init__(**kwargs)
         self.define_required_proportions([
             ['einzel_length', int],
             ['einzel_height', int],
             ['circle_radius', int],
             ['space', int]
         ])
-        super(BasicEinzelLensWithCircle, self).__init__(**kwargs)
 
     def add_einzel_cylinder(self, move_current_pos=True, **kwargs):
         cyl = BasicEinzelCylinder.EinzelCylinderWithCircle(origin=self.get_current_pos())

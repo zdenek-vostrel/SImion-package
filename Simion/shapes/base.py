@@ -26,6 +26,8 @@ class Base(object):
         self.potential = 1
         self.fill = True
 
+        self.complex_shape = False
+
     def set_potential(self, value):
         if not isinstance(value, int):
             raise ValueError("Potential can be set to int only!")

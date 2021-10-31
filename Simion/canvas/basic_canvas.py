@@ -21,7 +21,9 @@ class BasicCanvas(base.Base):
         self.name = name
         self.out_dir = pathlib.Path(out_dir)
         self.required_proportions = []
-        self.min_max_to_proportions(origin.x,origin.y,origin.x,origin.y)
+        self.min_max_to_proportions(origin.x, origin.y, origin.x, origin.y)
+
+        self.complex_shape = True
 
     def define_required_proportions(self, props):
         # todo check correct shape of props
@@ -33,7 +35,8 @@ class BasicCanvas(base.Base):
             if req_prop[0] not in self.proportions:
                 raise ValueError(f"Value of \" {req_prop[0]} \" is not set!")
             if not isinstance(self.proportions[req_prop[0]], req_prop[1]):
-                raise ValueError(f"Value of \" {req_prop[0]} \" is not of the correct instance! Should be {req_prop[1]} instead of {type(self.proportions[req_prop[0]]).__name__}")
+                raise ValueError(
+                    f"Value of \" {req_prop[0]} \" is not of the correct instance! Should be {req_prop[1]} instead of {type(self.proportions[req_prop[0]]).__name__}")
 
     def setup_canvas(self):
         logging.info("Setting up canvas.")
@@ -99,9 +102,10 @@ class BasicCanvas(base.Base):
 
     def save(self, scale=True):
         self.setup_dir()
-        #todo check if file already exists and deal with it
+        # todo check if file already exists and deal with it
         with open(self.out_dir.joinpath(pathlib.Path(self.name)), "w") as f:
             f.write(self.get_canvas_settings_text(scale=scale))
+            f.write('\n\n')  # blank lines for better readability
             f.write(self.get_gem_input(scale=scale))
 
     def get_gem_input(self, scale=True):
@@ -110,8 +114,7 @@ class BasicCanvas(base.Base):
         out = ""
         current_potential = None
         for shape in self.shapes:
-            print(self.shapes)
-            out += self.write_set_potential(shape, current_potential)
+            out += self.write_set_potential(shape, current_potential) if not shape.complex_shape else ''
             current_potential = shape.potential
             out += self.gem_from_shape(shape, scale=scale)
             out += "\n"
@@ -119,30 +122,32 @@ class BasicCanvas(base.Base):
         return out
 
     def gem_from_shape(self, shape, scale=True):
-        out = "\t\twithin{" if shape.fill else "notin{"
+        out = ("\t\twithin{" if shape.fill else "notin{") if not shape.complex_shape else ''
         out += shape.get_gem_input(scale=scale)
-        out += "}"
+        out += "}" if not shape.complex_shape else ''
         return out
 
     def write_set_potential(self, shape, current_potential):
-        end = "\t}}\n" if current_potential is not None else ""
+        if shape.potential is None:
+            return ''
+        end = "\t}\n" if current_potential is not None else ""
         if shape.potential == current_potential:
             return ""
         else:
-            return end+f"\te({shape.potential})"+"{fill{\n"
+            return end + f"\te({shape.potential})" + "{fill{\n"
 
     def get_canvas_settings_text(self, scale=True):
         self.check_correct_canvas_settings()
         s = self.scale if scale else 1
-        return f"PA_define({(self.current_pos.x - self.origin.x) * s}, {(self.current_pos.y - self.origin.y) * s}, 1, {self.canvas_settings['symmetry']}, {self.canvas_settings['mirroring'].upper()})"
+        return f"PA_define({(self.get_max_x() - self.origin.x) * s}, {(self.get_max_y() - self.origin.y) * s}, 1, {self.canvas_settings['symmetry']}, {self.canvas_settings['mirroring'].upper()})"
 
     def add_shape(self, shape, potential=1, fill=True):
-        shape.set_scale(self.scale)
-        shape.set_potential(potential)
-        shape.fill = fill
         # if shape is a complex shape/other canvas, it needs to be setup
         if hasattr(shape, "setup_canvas") and callable(getattr(shape, "setup_canvas")):
             shape.setup_canvas()
+        shape.set_scale(self.scale)
+        shape.set_potential(potential)
+        shape.fill = fill
         self.shapes += [shape]
         self.update_max_min()
 
@@ -189,3 +194,8 @@ class BasicCanvas(base.Base):
     #
     # def add_space_bellow(self, s):
     #     self.set_min_y(self.get_min_y() - s)
+
+    def set_scale(self, scale):
+        super(BasicCanvas, self).set_scale(scale)
+        for shape in self.shapes:
+            shape.set_scale(scale)
