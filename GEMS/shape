@@ -1,19 +1,21 @@
-PA_define(50, 15, 1, cylindrical, Y)
+PA_define(180, 30, 1, cylindrical, y)
 
-	e(0){fill{
-		within{box(20, 0,10,10)}
-		within{circle(20,5,10)}
-		within{circle(30,5,10)}
+e(0){fill{
+		within{box(25,10,55,20)}
+		within{circle(25,15,5)}
+		within{circle(55,15,5)}
 	}
-	e(1){fill{
-		within{box(30, 0,10,10)}
-		within{circle(30,5,10)}
-		within{circle(40,5,10)}
+}
+e(1){fill{
+		within{box(75,10,105,20)}
+		within{circle(75,15,5)}
+		within{circle(105,15,5)}
 	}
-	e(2){fill{
-		within{box(40, 0,10,10)}
-		within{circle(40,5,10)}
-		within{circle(50,5,10)}
+}
+e(2){fill{
+		within{box(125,10,155,20)}
+		within{circle(125,15,5)}
+		within{circle(155,15,5)}
 	}
-	}
-	}
+}
+

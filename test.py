@@ -6,12 +6,13 @@ def main():
     canvas.set_canvas_settings('symmetry', 'cylindrical')
     canvas.set_canvas_settings('mirroring', 'y')
     canvas.set_proportions({
-        'einzel_length': 10,
+        'einzel_length': 30,
         'einzel_height': 10,
-        'circle_radius': 10,
+        'circle_radius': 5,
+        'einzel_radius': 10,
         'space_between': 10,
-        'space_before': 10,
-        'space_after': 10,
+        'space_before': 20,
+        'space_after': 20,
         'space_above': 10
     })
     canvas.setup_canvas()

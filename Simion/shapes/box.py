@@ -25,6 +25,8 @@ class Box(base.Base):
 
         self.add_proportions_dict({"length": length, "height": height, "left_down_corner": self.left_down_corner})
 
+        self.update_max_min()
+
     def set_common(self, c):
         c = self.to_xy(c)
         if self.origin is None:
@@ -52,7 +54,7 @@ class Box(base.Base):
         self.set_from_left_down_corner(c - [self.length, 0])
 
     def get_left_down_corner(self, scale=False):
-        return self.get_proportions(scale=scale)['length']
+        return self.get_proportions(scale=scale)['left_down_corner']
 
     def get_left_up_corner(self, scale=False):
         return self.get_left_down_corner(scale=scale) + [0, self.get_height(scale=scale)]
@@ -70,14 +72,18 @@ class Box(base.Base):
         return self.get_proportions(scale=scale)['height']
 
     def update_max_min(self):
-        min_x = self.get_left_down_corner()['x']
-        min_y = self.get_left_down_corner()['y']
-        max_x = self.get_right_up_corner()['x']
-        max_y = self.get_right_up_corner()['y']
+        min_x = self.get_left_down_corner().x
+        min_y = self.get_left_down_corner().y
+        max_x = self.get_right_up_corner().x
+        max_y = self.get_right_up_corner().y
         self.min_max_to_proportions(max_x, max_y, min_x, min_y)
         super(Box, self).update_max_min()
 
     def get_gem_input(self, scale=True):
         super(Box, self).get_gem_input()
-        return f"box({self.left_down_corner.x}, {self.left_down_corner.y},{self.length},{self.height})"
+        ldc = self.get_left_down_corner(scale=scale)
+        print(self.get_right_up_corner())
+        length = self.get_length(scale=scale)
+        height = self.get_height(scale=scale)
+        return f"box({ldc.x},{ldc.y},{ldc.x+length},{ldc.y+height})"
 

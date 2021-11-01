@@ -23,3 +23,4 @@ class EinzelCylinderWithCircle(basic_canvas.BasicCanvas):
         self.add_circle(self.get('circle_radius'), move_current_pos=False)
         self.add_space(self.get('einzel_length'), 0)  # does not create a space but only updates the current position
         self.add_circle(self.get('circle_radius'))
+        print('Max y of cylinder: ' + str(self.get_max_y()))

@@ -116,9 +116,13 @@ class BasicCanvas(base.Base):
         for shape in self.shapes:
             out += self.write_set_potential(shape, current_potential) if not shape.complex_shape else ''
             current_potential = shape.potential
+            if current_potential is None:
+                print(shape)
+                print(current_potential)
             out += self.gem_from_shape(shape, scale=scale)
-            out += "\n"
-        out += "\t}"
+            out += '\n\t}\n}' if shape == self.shapes[-1] and not shape.complex_shape else '\n'
+            # out += "\n"
+        # out += '\t}\n}'
         return out
 
     def gem_from_shape(self, shape, scale=True):
@@ -130,16 +134,16 @@ class BasicCanvas(base.Base):
     def write_set_potential(self, shape, current_potential):
         if shape.potential is None:
             return ''
-        end = "\t}\n" if current_potential is not None else ""
+        end = "\t}\n}\n" if current_potential is not None else ''
         if shape.potential == current_potential:
             return ""
         else:
-            return end + f"\te({shape.potential})" + "{fill{\n"
+            return end + f"e({shape.potential})" + "{fill{\n"
 
     def get_canvas_settings_text(self, scale=True):
         self.check_correct_canvas_settings()
         s = self.scale if scale else 1
-        return f"PA_define({(self.get_max_x() - self.origin.x) * s}, {(self.get_max_y() - self.origin.y) * s}, 1, {self.canvas_settings['symmetry']}, {self.canvas_settings['mirroring'].upper()})"
+        return f"PA_define({(self.get_max_x() - self.origin.x) * s}, {(self.get_max_y() - self.origin.y) * s}, 1, {self.canvas_settings['symmetry']}, {self.canvas_settings['mirroring'].lower()})"
 
     def add_shape(self, shape, potential=1, fill=True):
         # if shape is a complex shape/other canvas, it needs to be setup
@@ -166,6 +170,7 @@ class BasicCanvas(base.Base):
         if move_current_pos:
             self.set_current_pos(c.XY(b.get_max_x(scale=False), b.get_origin().y))
         self.add_shape(b, **kwargs)
+        print('Box max y: ' + str(b.get_max_y()))
         return b
 
     def add_space(self, length, height):
@@ -190,7 +195,9 @@ class BasicCanvas(base.Base):
     #     self.set_max_x(self.get_max_x() + s)
     #
     def add_space_above(self, s):
+        print(self.get_max_y())
         self.set_max_y(self.get_max_y() + s)
+        print(self.get_max_y())
     #
     # def add_space_bellow(self, s):
     #     self.set_min_y(self.get_min_y() - s)

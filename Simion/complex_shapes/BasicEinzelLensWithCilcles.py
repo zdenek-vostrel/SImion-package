@@ -10,6 +10,7 @@ class BasicEinzelLensWithCircle(basic_canvas.BasicCanvas):
             ['einzel_length', int],
             ['einzel_height', int],
             ['circle_radius', int],
+            ['einzel_radius', int],
             ['space', int]
         ])
 
@@ -17,12 +18,13 @@ class BasicEinzelLensWithCircle(basic_canvas.BasicCanvas):
         cyl = BasicEinzelCylinder.EinzelCylinderWithCircle(origin=self.get_current_pos())
         cyl.set_proportions({'einzel_length': self.get('einzel_length'), 'einzel_height': self.get('einzel_height'),
                              'circle_radius': self.get('circle_radius')})
+        self.add_shape(cyl, **kwargs)
         if move_current_pos:
             self.set_current_pos(c.XY(cyl.get_max_x(scale=False), cyl.get_origin().y))
-        self.add_shape(cyl, **kwargs)
 
     def setup_canvas(self):
         super(BasicEinzelLensWithCircle, self).setup_canvas()
+        self.add_horizontal_space(self.get('einzel_radius'))
         self.add_einzel_cylinder(potential=0)
         self.add_space(self.get('space'), 0)
         self.add_einzel_cylinder(potential=1)

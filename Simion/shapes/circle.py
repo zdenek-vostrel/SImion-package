@@ -10,6 +10,7 @@ class Circle(base.Base):
         self.set_origin(center)
         self.r = self.get_proportions(scale=False)['r']
         self.center = self.get_proportions(scale=False)['center']
+        self.update_max_min()
 
     def update_max_min(self):
         r = self.get_proportions(scale=False)['r']
@@ -23,9 +24,11 @@ class Circle(base.Base):
 
     def get_gem_input(self, scale=True):
         super(Circle, self).get_gem_input()
-        scaled = self.scale if scale else 1
-        center = self.get_proportions(scale=scaled)['center']
-        r = self.get_proportions(scale=scaled)['r']
+        # scaled = self.scale if scale else 1
+        center = self.get_proportions(scale=scale)['center']
+        r = self.get_proportions(scale=scale)['r']
+        print('y max fo circle: '+str(self.get_max_y()))
+        print(self.get('center'))
         return f"circle({center.x},{center.y},{r})"
 
     def check_correct_shape_settings(self, **kwargs):

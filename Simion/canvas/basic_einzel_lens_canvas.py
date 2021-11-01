@@ -9,6 +9,7 @@ class EinzelLensBasic(basic_canvas.BasicCanvas):
             ['einzel_length', int],
             ['einzel_height', int],
             ['circle_radius', int],
+            ['einzel_radius', int],
             ['space_between', int],
             ['space_before', int],
             ['space_after', int],
@@ -18,10 +19,11 @@ class EinzelLensBasic(basic_canvas.BasicCanvas):
     def add_einzel(self, move_current_pos=True, **kwargs):
         ein = einzel.BasicEinzelLensWithCircle(origin=self.get_current_pos())
         ein.set_proportions({'einzel_length': self.get('einzel_length'), 'einzel_height': self.get('einzel_height'),
-                             'circle_radius': self.get('circle_radius'), 'space': self.get('space_between')})
+                             'circle_radius': self.get('circle_radius'), 'einzel_radius': self.get('einzel_radius'), 'space': self.get('space_between')})
+        self.add_shape(ein, **kwargs)
         if move_current_pos:
             self.set_current_pos(c.XY(ein.get_max_x(scale=False), ein.get_origin().y))
-        self.add_shape(ein, **kwargs)
+
 
     def setup_canvas(self):
         super(EinzelLensBasic, self).setup_canvas()
