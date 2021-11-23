@@ -1,5 +1,5 @@
 from Simion.canvas import basic_canvas
-from Simion.complex_shapes import BasicEinzelLensWithCilcles as einzel
+from Simion.complex_shapes import BasicEinzelLensWithCircles as einzel
 from Simion.common import coordinate2D as c
 
 class EinzelLensBasic(basic_canvas.BasicCanvas):
